@@ -2,12 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ASG Executive Election 2014 statistics</title>
+  <title>ASG Executive Election 2014 demographics</title>
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
   <style>
-    svg {
-      height: 200px;
-      min-height: 200px;
+    .graph rect {
+      fill: #86C5FC;
+    }
+    .graph text {
+      fill: black;
+      font: 12px sans-serif;
+      text-anchor: middle;
     }
   </style>
 </head>
@@ -15,14 +19,14 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <h2>ASG Executive Election 2014 statistics</h2>
-        <p>Compiled by Sheng Wu for Associated Student Government</p>
+        <h2>ASG Executive Election 2014 demographics</h2>
+        <p>Based on self-reported data. Compiled by Sheng Wu for Associated Student Government.</p>
       </div>
     </div>
     <table class="table table-hover">
       <thead>
         <tr>
-          <th>Statistic</th>
+          <th>Demographic</th>
           <th>Julia &amp; Erik</th>
           <th>Alex &amp; Ronak</th>
           <th>Total</th>
@@ -30,116 +34,101 @@
       </thead>
       <tbody>
         <tr>
-          <td>Number of votes</td>
+          <td><strong>Total votes</strong></td>
           <td>1489</td>
           <td>269</td>
           <td>1758</td>
         </tr>
         <tr>
-          <td>Gender of voters</td>
-          <td> <div class="je-gender"> <svg></svg> </div></td>
-          <td> <div class="ar-gender"> <svg></svg> </div></td>
-          <td> <div class="total-gender"> <svg></svg> </div></td>
+          <td><strong>Gender</strong></td>
+          <td> <svg class="graph je-gender"></svg></td>
+          <td> <svg class="graph ar-gender"></svg></td>
+          <td> <svg class="graph total-gender"></svg></td>
+        </tr>
+        <tr>
+          <td><strong>Year</strong></td>
+          <td> <svg class="graph je-year"></svg></td>
+          <td> <svg class="graph ar-year"></svg></td>
+          <td> <svg class="graph total-year"></svg></td>
+        </tr>
+        <tr>
+          <td><strong>School</strong></td>
+          <td> <svg class="graph je-school"></svg></td>
+          <td> <svg class="graph ar-school"></svg></td>
+          <td> <svg class="graph total-school"></svg></td>
+        </tr>
+        <tr>
+          <td><strong>Greek life involvement</strong></td>
+          <td> <svg class="graph je-greek"></svg></td>
+          <td> <svg class="graph ar-greek"></svg></td>
+          <td> <svg class="graph total-greek"></svg></td>
+        </tr>
+        <tr>
+          <td><strong>Housing</strong><br>Off: off-campus<br>Greek: fraternity/sorority<br>
+            RH: residence hall<br>RCm: residential community<br>RC: residential college</td>
+          <td> <svg class="graph je-housing"></svg></td>
+          <td> <svg class="graph ar-housing"></svg></td>
+          <td> <svg class="graph total-housing"></svg></td>
         </tr>
       </tbody>
     </table>
   </div>
-
-
-
-
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-  <script src="nv.d3.min.js"></script>
   <script>
     var data = [
-    ['total-gender',
-    function() { return [{
-      key: "Total gender",
-      values: [
-      {
-        'label': 'Male',
-        'value': 680,
-      },
-      {
-        'label': 'Female',
-        'value': 970,
-      },
-      {
-        'label': 'Other',
-        'value': 14,
-      },
-      ]
-    }];}],
+      ['total-gender', [['Male', 680], ['Female', 970], ['Other', 14]]],
+      ['je-gender', [['Male', 539], ['Female', 839], ['Other', 10]]],
+      ['ar-gender', [['Male', 141], ['Female', 93], ['Other', 4]]],
+      ['total-year', [['2018+', 4], ['2017', 434], ['2016', 437], ['2015', 509], ['2014', 289]]],
+      ['je-year', [['2018+', 2], ['2017', 379], ['2016', 368], ['2015', 431], ['2014', 250]]],
+      ['ar-year', [['2018+', 2], ['2017', 55], ['2016', 69], ['2015', 78], ['2014', 39]]],
+      ['total-school', [['Bienen', 39], ['McC', 246], ['Medill', 135], ['SoC', 205], ['SESP', 110], ['WCAS', 718]]],
+      ['je-school', [['Bienen', 35], ['McC', 209], ['Medill', 127], ['SoC', 183], ['SESP', 97], ['WCAS', 599]]],
+      ['ar-school', [['Bienen', 4], ['McC', 37], ['Medill', 8], ['SoC', 22], ['SESP', 13], ['WCAS', 119]]],
+      ['total-greek', [['Yes', 832], ['No', 826]]],
+      ['je-greek', [['Yes', 727], ['No', 696]]],
+      ['ar-greek', [['Yes', 105], ['No', 130]]],
+      ['total-housing', [['Off', 605], ['Greek', 260], ['RH', 310], ['RCm', 171], ['RC', 312]]],
+      ['je-housing', [['Off', 514], ['Greek', 228], ['RH', 244], ['RCm', 155], ['RC', 281]]],
+      ['ar-housing', [['Off', 91], ['Greek', 32], ['RH', 66], ['RCm', 16], ['RC', 31]]],
+    ];
 
-    ['je-gender',
-    function() { return [{
-      key: "Julia and Erik gender",
-      values: [
-      {
-        'label': 'Male',
-        'value': 539,
-      },
-      {
-        'label': 'Female',
-        'value': 879,
-      },
-      {
-        'label': 'Other',
-        'value': 10,
-      },
-      ]
-    }];}],
+    var draw_bar_graph = function(graph_data) {
+      var class_name = graph_data[0];
+      var data = graph_data[1];
+      var width = 240;
+      var height = 120;
+      var y = d3.scale.linear()
+                .range([height, 0]);
+      var chart = d3.select('.' + class_name)
+                    .attr("width", width)
+                    .attr("height", height);
+      y.domain([0, d3.max(data, function(d) { return d[1]; })]);
+      var bar_width = width / data.length;
+      var bar = chart.selectAll("g")
+                     .data(data)
+                     .enter().append("g")
+                     .attr("transform", function(d, i) { 
+                       return "translate(" + i * bar_width + ",0)";
+                     });
+      bar.append("rect")
+         .attr("y", function(d) { return y(d[1]); })
+         .attr("height", function(d) { return height - y(d[1]); })
+         .attr("width", bar_width - 1);
 
-    ['ar-gender',
-    {
-      key: "Alex and Ronak gender",
-      values: [
-      {
-        'label': 'Male',
-        'value': 141,
-      },
-      {
-        'label': 'Female',
-        'value': 93,
-      },
-      {
-        'label': 'Other',
-        'value': 4,
-      },
-      ]
-    }],
+      bar.append("text")
+         .attr("x", bar_width / 2)
+         .attr("y", function(d) { return d3.min([y(d[1]) + 3, 92]); })
+         .attr("dy", ".75em")
+         .text(function(d) { return d[1]; });
 
-
-
-
-    ]; // end of data array
-
-
-    var make_graph_function = function(pair) {
-      var cls = pair[0];
-      var dta = pair[1];
-      console.log(cls);
-      console.log(dta);
-      return function() {
-        var chart = nv.models.discreteBarChart()
-            .x(function(d) { return d.label })
-            .y(function(d) { return d.value })
-            //.staggerLabels(true)
-            .tooltips(false)
-            .showValues(true)
-            .transitionDuration(350);
-        d3.select('.' + cls + ' svg')
-            .datum(dta())
-            .call(chart);
-        nv.utils.windowResize(chart.update);
-        return chart;
-      };
+     bar.append("text")
+         .attr("x", bar_width / 2)
+         .attr("y", 115)
+         .text(function(d) { return d[0]; });
     };
 
-    var graph_functions = data.map(make_graph_function);
-    console.log(graph_functions);
-    graph_functions[0]();
-    graph_functions.map(nv.addGraph);
+    data.map(draw_bar_graph);
   </script>
 </body>
 </html>
