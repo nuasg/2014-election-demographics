@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ASG Executive Election 2014 statistics</title>
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <style>
+    svg {
+      height: 200px;
+      min-height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h2>ASG Executive Election 2014 statistics</h2>
+        <p>Compiled by Sheng Wu for Associated Student Government</p>
+      </div>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Statistic</th>
+          <th>Julia &amp; Erik</th>
+          <th>Alex &amp; Ronak</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Number of votes</td>
+          <td>1489</td>
+          <td>269</td>
+          <td>1758</td>
+        </tr>
+        <tr>
+          <td>Gender of voters</td>
+          <td> <div class="je-gender"> <svg></svg> </div></td>
+          <td> <div class="ar-gender"> <svg></svg> </div></td>
+          <td> <div class="total-gender"> <svg></svg> </div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="nv.d3.min.js"></script>
+  <script>
+    var data = [
+    ['total-gender',
+    function() { return [{
+      key: "Total gender",
+      values: [
+      {
+        'label': 'Male',
+        'value': 680,
+      },
+      {
+        'label': 'Female',
+        'value': 970,
+      },
+      {
+        'label': 'Other',
+        'value': 14,
+      },
+      ]
+    }];}],
+
+    ['je-gender',
+    function() { return [{
+      key: "Julia and Erik gender",
+      values: [
+      {
+        'label': 'Male',
+        'value': 539,
+      },
+      {
+        'label': 'Female',
+        'value': 879,
+      },
+      {
+        'label': 'Other',
+        'value': 10,
+      },
+      ]
+    }];}],
+
+    ['ar-gender',
+    {
+      key: "Alex and Ronak gender",
+      values: [
+      {
+        'label': 'Male',
+        'value': 141,
+      },
+      {
+        'label': 'Female',
+        'value': 93,
+      },
+      {
+        'label': 'Other',
+        'value': 4,
+      },
+      ]
+    }],
+
+
+
+
+    ]; // end of data array
+
+
+    var make_graph_function = function(pair) {
+      var cls = pair[0];
+      var dta = pair[1];
+      console.log(cls);
+      console.log(dta);
+      return function() {
+        var chart = nv.models.discreteBarChart()
+            .x(function(d) { return d.label })
+            .y(function(d) { return d.value })
+            //.staggerLabels(true)
+            .tooltips(false)
+            .showValues(true)
+            .transitionDuration(350);
+        d3.select('.' + cls + ' svg')
+            .datum(dta())
+            .call(chart);
+        nv.utils.windowResize(chart.update);
+        return chart;
+      };
+    };
+
+    var graph_functions = data.map(make_graph_function);
+    console.log(graph_functions);
+    graph_functions[0]();
+    graph_functions.map(nv.addGraph);
+  </script>
+</body>
+</html>
