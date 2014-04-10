@@ -64,8 +64,8 @@
           <td> <svg class="graph total-greek"></svg></td>
         </tr>
         <tr>
-          <td><strong>Housing</strong><br>Off: off-campus<br>Greek: fraternity/sorority<br>
-            RH: residence hall<br>RCm: residential community<br>RC: residential college</td>
+          <td><strong>Housing</strong><br><small>Off: off-campus<br>Greek: fraternity/sorority<br>
+            RH: residence hall<br>RCm: residential community<br>RC: residential college</small></td>
           <td> <svg class="graph je-housing"></svg></td>
           <td> <svg class="graph ar-housing"></svg></td>
           <td> <svg class="graph total-housing"></svg></td>
@@ -97,7 +97,7 @@
     var draw_bar_graph = function(graph_data) {
       var class_name = graph_data[0];
       var data = graph_data[1];
-      var width = 240;
+      var width = 250;
       var height = 120;
       var y = d3.scale.linear()
                 .range([height, 0]);
@@ -119,13 +119,13 @@
 
       bar.append("text")
          .attr("x", bar_width / 2)
-         .attr("y", function(d) { return d3.min([y(d[1]) + 3, 92]); })
+         .attr("y", function(d) { return d3.min([y(d[1]) + 3, height-28]); })
          .attr("dy", ".75em")
          .text(function(d) { return d[1]; });
 
      bar.append("text")
          .attr("x", bar_width / 2)
-         .attr("y", 115)
+         .attr("y", height-5)
          .text(function(d) { return d[0]; });
     };
 
